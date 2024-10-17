@@ -2,8 +2,8 @@ package com.bootcamp.conta.service.controller;
 
 
 import com.bootcamp.conta.service.dto.ContaRequestDTO;
-import com.bootcamp.conta.service.model.Conta;
-import com.bootcamp.conta.service.repository.ContaRepository;
+import com.bootcamp.conta.service.dto.ContaResponseDTO;
+import com.bootcamp.conta.service.service.ContaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,7 +26,7 @@ class ContaControllerTest  {
     private MockMvc mockMvc;
 
     @MockBean
-    private ContaRepository contaRepository;
+    private ContaService contaService;
 
     //Objeto -> JSON
     @Autowired
@@ -47,38 +45,27 @@ class ContaControllerTest  {
 
         UUID idDaContaSalva = UUID.randomUUID();
 
-        Conta contaMock = Conta.builder()
+        ContaResponseDTO contaResponseDTO = ContaResponseDTO.builder()
                 .id(idDaContaSalva)
-                .nomeTitular(request.getNomeTitular())
-                .numeroAgencia(request.getNumeroAgencia())
-                .numeroConta(request.getNumeroConta())
-                .chavePix(request.getChavePix())
-                .saldo(BigDecimal.ZERO)
-                .build();
+                .nomeTitular(request.getNomeTitular()).build();
 
-//        when(contaRepository.findByNomeTitularAndNumeroContaAndChavePix(
-//                request.getNomeTitular(),
-//                request.getNumeroConta(),
-//                request.getChavePix()
-//        )).thenReturn(Optional.empty());
+        when(contaService.criarConta(request)).thenReturn(contaResponseDTO);
 
-        when(contaRepository.save(any())).thenReturn(contaMock);
-
+        //Avalio a criação, e o que foi retornado.
         mockMvc.perform(post("/api/contas")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("nomeTitular").value("Cliente"))
                 .andExpect(status().isCreated());
-        //Avalio a criação, e o que foi retornado.
+
     }
 
     @Test
     void deveBuscarContaComSucesso() throws Exception {
 
         mockMvc.perform(
-                post("/api/contas")
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk());
+                get("/api/contas").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
 

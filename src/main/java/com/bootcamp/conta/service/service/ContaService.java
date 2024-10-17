@@ -60,7 +60,7 @@ public class ContaService {
     }
 
 
-    public List<ContaDTO> consultaContas (){
+    public List<ContaDTO> consultaContas(){
 
         List<ContaDTO> contas = contaRepository.findAll().stream().map(
                 conta -> ContaDTO.builder()
