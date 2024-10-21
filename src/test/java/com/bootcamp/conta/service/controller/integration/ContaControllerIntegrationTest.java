@@ -3,11 +3,13 @@ package com.bootcamp.conta.service.controller.integration;
 
 import com.bootcamp.conta.service.model.Conta;
 import com.bootcamp.conta.service.repository.ContaRepository;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -21,14 +23,24 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ContaControllerIntegrationTest {
 
     @LocalServerPort
     private int port;
+
+    @RegisterExtension
+    static WireMockExtension wireMockServer = WireMockExtension.newInstance()
+            .options(
+                    wireMockConfig().port(9001)
+            )
+            .build();
+
 
     @Autowired
     private ContaRepository contaRepository;
@@ -70,9 +82,29 @@ class ContaControllerIntegrationTest {
                 .post("/api/contas")
                 .then()
                 .assertThat()
-                .statusCode(HttpStatus.CREATED.value());
+                .statusCode(HttpStatus.CREATED.value())
+                .body("id", notNullValue())
+                .body("nomeTitular", equalTo("Samuel"));
 
     }
+
+    @Test
+    void deveRetornarErrorPorNaoCriarChaveNoBacen() throws IOException {
+
+        String request = new String(Files.readString(Paths.get("src/test/resources/request-conta-erro-bacen.json")));
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/api/contas")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("detail", equalTo("Erro ao cadastrar chave no Bacen"));
+
+    }
+
     @Test
     void deveBuscarContaComSucesso(){
 

@@ -6,11 +6,14 @@ import com.bootcamp.conta.service.dto.ContaRequestDTO;
 import com.bootcamp.conta.service.dto.ContaResponseDTO;
 import com.bootcamp.conta.service.exceptions.ContaExistenteException;
 import com.bootcamp.conta.service.exceptions.ContaNaoExisteException;
+import com.bootcamp.conta.service.exceptions.ErroCadastroChaveBacenException;
+import com.bootcamp.conta.service.feign.BacenService;
 import com.bootcamp.conta.service.model.Conta;
 import com.bootcamp.conta.service.repository.ContaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,8 +26,12 @@ import java.util.UUID;
 public class ContaService {
 
     private final ContaRepository contaRepository;
+    private final BacenService bacenService;
 
-
+    //Atomicidade transacional.
+    @Transactional(
+            rollbackFor = ErroCadastroChaveBacenException.class
+    )
     public ContaResponseDTO criarConta(ContaRequestDTO contaRequestDTO){
 
         Optional<Conta> contaOptional = contaRepository.findByNomeTitularAndNumeroContaAndChavePix(
@@ -44,10 +51,10 @@ public class ContaService {
                 .chavePix(contaRequestDTO.getChavePix())
                 .saldo(BigDecimal.ZERO).build();
 
-
-
-        //Salva no banco, e entao retornamos
+        //Salva no banco, e então retornamos Response
         Conta contaSalva = contaRepository.save(conta);
+
+        bacenService.criarChave(contaSalva.getChavePix());
 
         ContaResponseDTO contaResponseDTO = ContaResponseDTO.builder()
                 .id(conta.getId())
@@ -59,7 +66,7 @@ public class ContaService {
         return contaResponseDTO;
     }
 
-
+    @Transactional(readOnly = true)
     public List<ContaDTO> consultaContas(){
 
         List<ContaDTO> contas = contaRepository.findAll().stream().map(
@@ -101,6 +108,7 @@ public class ContaService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public ContaDTO consultaContaPorID(UUID id){
 
         Conta conta = contaRepository.findById(id).orElseThrow(() -> new ContaNaoExisteException("Conta não existe."));
