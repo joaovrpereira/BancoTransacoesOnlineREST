@@ -9,14 +9,14 @@ O projeto é composto por dois Microsserviços: **Conta** e **Bacen**, integrado
 
 # Endpoints Principais
 
-**GET**: /api/contas - Consulta de Contas
-**POST**: /api/contas - Cadastro de Contas
-**GET**: /api/contas/{id} - Consulta de Conta pelo ID
-**PUT**: /api/contas/{id} - Atualização de Conta pelo ID
-**DELETE**: /api/contas/{id} - Exclusão de Conta pelo ID
+- **GET**: /api/contas - Consulta de Contas
+- **POST**: /api/contas - Cadastro de Contas
+- **GET**: /api/contas/{id} - Consulta de Conta pelo ID
+- **PUT**: /api/contas/{id} - Atualização de Conta pelo ID
+- **DELETE**: /api/contas/{id} - Exclusão de Conta pelo ID
 
-**GET**: /api/bacen/chaves/{id} - Busca de Chave PIX pelo ID
-**POST**: /api/bacen/chaves - Criação de Chave PIX
+- **GET**: /api/bacen/chaves/{id} - Busca de Chave PIX pelo ID
+- **POST**: /api/bacen/chaves - Criação de Chave PIX
 
 # Testes
 
