@@ -1,6 +1,6 @@
 package com.bootcamp.conta.service.feign;
 
-import com.bootcamp.conta.service.exceptions.ErroCadastroChaveBacenException;
+import com.bootcamp.conta.service.exceptions.ErroIntegracaoBacenException;
 import com.bootcamp.conta.service.feign.dto.ChaveRequestDTO;
 import com.bootcamp.conta.service.feign.dto.ChaveResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,16 @@ public class BacenService {
             return bacenClient.criarChave(chaveRequestDTO);
         } catch(Exception exc) {
             log.error("Erro ao chamar a API de cadastrar chave do Bacen", exc);
-            throw new ErroCadastroChaveBacenException("Erro ao cadastrar chave no Bacen", exc);
+            throw new ErroIntegracaoBacenException("Erro ao cadastrar chave no Bacen", exc);
+        }
+    }
+
+    public ChaveResponseDTO buscaChave(final String chave){
+        try{
+            return bacenClient.buscaChave(chave);
+        } catch(Exception exc) {
+            log.error("Erro ao chamar a API de buscar chave do Bacen", exc);
+            throw new ErroIntegracaoBacenException("Erro ao buscar chave no Bacen", exc);
         }
     }
 

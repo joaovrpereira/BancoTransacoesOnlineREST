@@ -69,7 +69,15 @@
             <artifactId>jakarta.persistence-api</artifactId>
             <version>3.1.0</version>
         </dependency>
-
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -108,19 +116,21 @@
 		<profile>
 			<id>bacen</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
 				<build.profile.id>bacen</build.profile.id>
+				<start-class>com.bootcamp.bacen.service.BacenServiceApplication</start-class>
 			</properties>
 		</profile>
 		<profile>
 			<id>conta</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
 				<build.profile.id>conta</build.profile.id>
+				<start-class>com.bootcamp.conta.service.ContaServiceApplication</start-class>
 			</properties>
 		</profile>
 

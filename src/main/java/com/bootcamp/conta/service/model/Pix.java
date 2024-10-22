@@ -1,14 +1,13 @@
 package com.bootcamp.conta.service.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -21,13 +20,19 @@ public class Pix {
     private UUID id;
 
     @Column
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Column
     private String chavePixPagador;
 
     @Column
+    private String chavePixRecebedor;
+
+    @Column
     private BigDecimal valor;
+
+    @Column(unique = true)
+    private String idempotencia;
 
 
     //Uma conta pode fazer vários pix

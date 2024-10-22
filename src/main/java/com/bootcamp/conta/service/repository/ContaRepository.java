@@ -11,20 +11,16 @@ import java.util.UUID;
 @Repository
 public interface ContaRepository extends JpaRepository<Conta, UUID> {
 
-
-
-
-
     //Optional: Forma de retornar um valor que pode ou não ser nulo
     Optional<Conta> findByChavePix(String chavePixPagador);
 
     Optional<Conta> findByNomeTitularAndNumeroContaAndChavePix(String nomeTitular,Integer numeroConta, String chavePix);
 
-//    Optional<Conta> findByNumeroConta(Integer numeroConta);
-//
-//    //jpql: Linguagem de escrita, na ideia de Objeto (Hibernate utiliza)
-//
-//    @Query("SELECT conta FROM Conta conta WHERE conta.numeroConta = :numeroConta AND conta.chavePix = :chavePix AND conta.saldo > 10")
-//    Optional<Conta> findByNumeroContaAndChavePixAndSaldoMaiorQue10(Integer numeroConta, String chavePix);
+    /*
+    jpql: Linguagem de escrita, na ideia de Objeto (Hibernate utiliza)
+
+    @Query("SELECT conta FROM Conta conta WHERE conta.numeroConta = :numeroConta AND conta.chavePix = :chavePix AND conta.saldo > 10")
+    Optional<Conta> findByNumeroContaAndChavePixAndSaldoMaiorQue10(Integer numeroConta, String chavePix);
+    */
 
 }
