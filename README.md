@@ -1,6 +1,6 @@
 # Banco Digital REST
 
-O **Banco Digital REST** é um projeto bancário simples onde é possível, por meio de métodos HTTP,  a Criação e Edição de Contas bancárias, Gerênciamento de Chaves Pix e a funcionalidade de se realizar transferências entre diferentes contas. Desenvolvido durante um Bootcamp da empresa Matera, o projeto utiliza a linguagem **Java**, em conjunto com o framework **SpringBoot** e **Maven**, para o gerenciamento de dependências. Para a camada de banco de dados, foi utilizado o H2Console Database, além do Hibernate para o Mapeamento Objeto-Relacional.
+O **Banco Digital REST** é um projeto bancário simples onde é possível, por meio de métodos HTTP,  a Criação e Edição de Contas bancárias, Gerenciamento de Chaves Pix e a funcionalidade de se realizar transferências entre diferentes contas. Desenvolvido durante um Bootcamp da empresa Matera, o projeto utiliza a linguagem **Java**, em conjunto com o framework **SpringBoot** e **Maven**, para o gerenciamento de dependências. Para a camada de banco de dados, foi utilizado o H2Console Database, além do Hibernate para o Mapeamento Objeto-Relacional.
 
 O projeto é composto por dois Microsserviços: **Conta** e **Bacen**, integrados utilizando o conceito de  **FeignClient**.
 
